@@ -12,10 +12,8 @@ function LoginPage() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            console.log(username, password)
             const response = await adminLogin({ username, password })
             if (response.data.token) {
-                console.log(response.data.token)
                 localStorage.setItem("token", response.data.token)
                 localStorage.setItem("username", username)
                 navigate('/admin-panel');
