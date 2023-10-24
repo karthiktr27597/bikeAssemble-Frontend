@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './EmployeeLogin.css';
 import { employeeLogin, employeeLogout } from '../Api/Employee';
 
@@ -9,6 +9,15 @@ const EmployeeLogin = () => {
     const [logoutTime, setLogoutTime] = useState(null);
     const [duration, setDuration] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+
+    useEffect(() => {
+        if (localStorage.getItem('employee')) {
+            setSelectedEmployee(localStorage.getItem('employee'))
+            setSelectedBike(localStorage.getItem('bike'))
+            setLoginTime(localStorage.getItem('loginTime'))
+            console.log('useEffect')
+        }
+    }, [])
 
     const handleLogin = async (e) => {
         try {
@@ -28,6 +37,9 @@ const EmployeeLogin = () => {
             // const indianTimeIn = dateObjectIn.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour12: false });
             const currentTime = await new Date().toLocaleTimeString();
             setLoginTime(currentTime);
+            localStorage.setItem("loginTime", currentTime);
+            localStorage.setItem("employee", selectedEmployee);
+            localStorage.setItem("bike", selectedBike);
 
         } catch (err) {
             console.log(err.message)
@@ -55,8 +67,9 @@ const EmployeeLogin = () => {
                 setLogoutTime(currentTime);
                 setSelectedEmployee('')
                 setSelectedBike('')
-                setErrorMessage('')
+                setErrorMessage(null)
                 setLoginTime(null);
+                localStorage.clear();
             }
         } catch (err) {
             console.log(err)
